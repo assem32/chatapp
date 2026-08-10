@@ -32,7 +32,7 @@ function connect(){
 function onConnected(){
     stompClient.subscribe("/topic/public",onMessageReceived);
 
-    stompClient.send("/app/chat.adduser",{},JSON.stringify(
+    stompClient.send("/app/chat.addUser",{},JSON.stringify(
         {
             sender:username,
             type:'JOIN'
