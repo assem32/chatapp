@@ -16,7 +16,7 @@ var colors = [
     '#ffc107', '#ff85af', '#FF9800', '#39bbb0'
 ];
 
-function connect(){
+function connect(event){
     username = document.querySelector("#name").value.trim();
     if(username){
         usernamePage.classList.add('hidden');
@@ -35,7 +35,7 @@ function onConnected(){
     stompClient.send("/app/chat.addUser",{},JSON.stringify(
         {
             sender:username,
-            type:'JOIN'
+            messageType:'JOIN'
         }
     ));
     connectingElement.classList.add('hidden');
@@ -52,7 +52,7 @@ function sendMessage(event){
         var chatMessage = {
             sender : username,
             content : messageContent,
-            type : 'CHAT'
+            messageType : 'CHAT'
         }
 
         stompClient.send(
@@ -71,10 +71,10 @@ function onMessageReceived(payload) {
 
     var messageElement = document.createElement('li');
 
-    if(message.type === 'JOIN') {
+    if(message.messageType === 'JOIN') {
         messageElement.classList.add('event-message');
         message.content = message.sender + ' joined!';
-    } else if (message.type === 'LEAVE') {
+    } else if (message.messageType === 'LEAVE') {
         messageElement.classList.add('event-message');
         message.content = message.sender + ' left!';
     } else {
@@ -92,6 +92,8 @@ function onMessageReceived(payload) {
         usernameElement.appendChild(usernameText);
         messageElement.appendChild(usernameElement);
     }
+
+    var textContent = message.content !== null && message.content !== undefined ? message.content : '';
 
     var textElement = document.createElement('p');
     var messageText = document.createTextNode(message.content);
